@@ -184,6 +184,9 @@ public class GameManager : MonoBehaviour
     {
         // dealer gets another card
         CheckGameConditions();
+
+        // dealer hits cards until 17
+
     }
 
     public void RestartGame()
@@ -218,27 +221,30 @@ public class GameManager : MonoBehaviour
         List<string> newDeck = new List<string>();
         cardsDeck = new List<PlayingCard>();
         int valueIndex = 0;
-        foreach (string s in suits)
+        for (int i = 0; i < 8; i++)         // generate 8 decks of cards
         {
-            foreach (string v in values)
+            foreach (string s in suits)
             {
-                newDeck.Add(s + v);
-                string name = s + v;
-                if (v.Equals("K") || v.Equals("Q") || v.Equals("J"))
+                foreach (string v in values)
                 {
-                    valueIndex = 10;
+                    newDeck.Add(s + v);
+                    string name = s + v;
+                    if (v.Equals("K") || v.Equals("Q") || v.Equals("J"))
+                    {
+                        valueIndex = 10;
+                    }
+                    else
+                    {
+                        valueIndex++;
+                    }
+                    GameObject card = Instantiate(CardPrefab, cardsParent.transform);
+                    card.gameObject.name = name;
+                    PlayingCard playingCard = card.GetComponent<PlayingCard>();
+                    playingCard.SetPlayingCard(name, valueIndex, s, spritesManager.getSpritesByName(name));
+                    cardsDeck.Add(playingCard);
                 }
-                else
-                {
-                    valueIndex++;
-                }
-                GameObject card = Instantiate(CardPrefab, cardsParent.transform);
-                card.gameObject.name = name;
-                PlayingCard playingCard = card.GetComponent<PlayingCard>();
-                playingCard.SetPlayingCard(name, valueIndex, s, spritesManager.getSpritesByName(name));
-                cardsDeck.Add(playingCard);
+                valueIndex = 0;
             }
-            valueIndex = 0;
         }
     }
 
