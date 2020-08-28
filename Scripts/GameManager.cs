@@ -182,11 +182,21 @@ public class GameManager : MonoBehaviour
 
     public void Stand()
     {
-        // dealer gets another card
-        CheckGameConditions();
-
         // dealer hits cards until 17
-
+        while (dealer.playerHand < 17)
+        {
+            
+            dealer.Playercards.Add(cardsDeck[topOfDeckIndex]);
+            int lastCardIndex = dealer.Playercards.Count - 1;
+            dealer.Playercards[lastCardIndex].transform.parent = dealerCards.transform;
+            dealer.Playercards[lastCardIndex].transform.localScale = Vector3.one;
+            dealer.Playercards[lastCardIndex].transform.position = new Vector3(dealerCards.transform.position.x + dealer.Playercards.Count - 1, dealer.Playercards[lastCardIndex].transform.position.y, dealer.Playercards[lastCardIndex].transform.position.z);
+            dealerHandText.text = dealer.CalculateHandValue().ToString();
+            topOfDeckIndex++;
+        }
+        // calculate game
+        
+        CheckGameConditions();        
     }
 
     public void RestartGame()
